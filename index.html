@@ -894,4 +894,483 @@ footer {
             <label>I avoid downloading files from unknown sources.</label>
         </div>
 
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I keep my devices and applications updated.</label>
+        </div>
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I review my privacy and account settings.</label>
+        </div>
+
+        <div class="check-progress">
+            <div id="checkBar"></div>
+        </div>
+
+        <p id="checkText" style="margin-top:12px">0 of 7 safety practices completed.</p>
+
+    </div>
+
+</section>
+
+<!-- EMERGENCY GUIDE -->
+<section class="section" id="emergency">
+
+    <div class="section-heading">
+        <h2>Emergency Guide</h2>
+        <p>What to do if you encounter or become a victim of an online scam.</p>
+    </div>
+
+    <div class="card">
+
+        <div class="guide-step">
+            <strong>01. Stop communicating.</strong>
+            <p>Do not reply to suspicious messages or follow additional instructions from the scammer.</p>
+        </div>
+
+        <div class="guide-step">
+            <strong>02. Secure your accounts.</strong>
+            <p>Change compromised passwords using the official website or application. Enable two-factor authentication.</p>
+        </div>
+
+        <div class="guide-step">
+            <strong>03. Contact your bank or payment provider.</strong>
+            <p>If money or financial information is involved, contact your bank immediately through its official contact channels.</p>
+        </div>
+
+        <div class="guide-step">
+            <strong>04. Save evidence.</strong>
+            <p>Keep screenshots, transaction records, messages, phone numbers, and suspicious links.</p>
+        </div>
+
+        <div class="guide-step">
+            <strong>05. Report the incident.</strong>
+            <p>Report the account or message through the platform. In the Philippines, you may also seek assistance from the PNP Anti-Cybercrime Group or NBI Cybercrime Division.</p>
+        </div>
+
+        <div class="guide-step">
+            <strong>06. Warn others.</strong>
+            <p>Inform people who may be affected so they can avoid the same scam.</p>
+        </div>
+
+        <button class="primary-btn" style="margin-top:20px"
+        onclick="window.open('https://acg.pnp.gov.ph/', '_blank')">
+            Visit PNP Anti-Cybercrime Group →
+        </button>
+
+    </div>
+</section>
+
+<footer>
+    <p>SafeNet | Digital Safety and Scam Awareness</p>
+    <p style="margin-top:6px">An educational website promoting responsible and safer internet use.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+
+// ===== NAVIGATION =====
+
+function goTo(id) {
+    document.getElementById(id).scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+document.querySelectorAll(".nav a").forEach(link => {
+    link.addEventListener("click", function() {
+        document.querySelectorAll(".nav a").forEach(a =>
+            a.classList.remove("active")
+        );
+        this.classList.add("active");
+    });
+});
+
+// ===== SCAM LIBRARY =====
+
+function toggleDetails(id) {
+    document.getElementById(id).classList.toggle("show");
+}
+
+// ===== SCAM SPOTTER =====
+
+const scenarios = [
+    {
+        title: "Scenario 01: Suspicious Bank Message",
+        message: "SECURITY ALERT! Your bank account will be suspended today. Verify your account immediately. Send your password and OTP to complete verification.",
+        answer: "scam",
+        explanation: "Correct! This is a scam. Legitimate banks do not ask you to share your password or OTP through messages."
+    },
+    {
+        title: "Scenario 02: Online Shopping",
+        message: "A seller offers a brand-new smartphone at an extremely low price but demands payment outside the shopping platform.",
+        answer: "scam",
+        explanation: "Correct! Unusually low prices and requests for payment outside a trusted platform are warning signs."
+    },
+    {
+        title: "Scenario 03: Account Security",
+        message: "You receive an unexpected message asking you to provide your verification code to prevent your account from being deleted.",
+        answer: "scam",
+        explanation: "Correct! Never share verification codes. Scammers use them to access accounts."
+    },
+    {
+        title: "Scenario 04: Official Application",
+        message: "You open your banking application using the app you already installed and check your account through its official security settings.",
+        answer: "safe",
+        explanation: "Correct! Using the official application and its built-in security settings is generally safer. Always verify that the app is authentic."
+    }
+];
+
+let scenarioIndex = 0;
+
+function showScenario() {
+    const s = scenarios[scenarioIndex];
+
+    document.querySelector("#spotter h3").textContent = s.title;
+    document.querySelector(".example-message").textContent = s.message;
+
+    document.getElementById("spotterFeedback").className = "feedback";
+    document.getElementById("spotterFeedback").textContent = "";
+}
+
+function checkSpotter(choice) {
+    const s = scenarios[scenarioIndex];
+    const feedback = document.getElementById("spotterFeedback");
+
+    if (choice === s.answer) {
+        feedback.className = "feedback correct";
+        feedback.textContent = s.explanation;
+    } else {
+        feedback.className = "feedback incorrect";
+        feedback.textContent = "Not quite. " + s.explanation;
+    }
+}
+
+function nextScenario() {
+    scenarioIndex = (scenarioIndex + 1) % scenarios.length;
+    showScenario();
+}
+
+// ===== LINK CHECKER =====
+
+function checkLink() {
+    const input = document.getElementById("urlInput").value.trim();
+    const result = document.getElementById("linkResult");
+
+    result.style.display = "block";
+
+    if (!input) {
+        result.innerHTML = "Please enter a website address.";
+        return;
+    }
+
+    let url;
+
+    try {
+        url = new URL(input.includes("://") ? input : "https://" + input);
+    } catch {
+        result.innerHTML = "<span class='warning'>Invalid URL format.</span>";
+        return;
+    }
+
+    if (!["http:", "https:"].includes(url.protocol)) {
+        result.innerHTML = "<span class='warning'>Unusual URL protocol detected.</span>";
+        return;
+    }
+
+    const issues = [];
+
+    if (url.protocol !== "https:") {
+        issues.push("The website does not use HTTPS.");
+    }
+
+    if (url.username || url.password) {
+        issues.push("The address contains unusual login information.");
+    }
+
+    if (url.hostname.includes("xn--")) {
+        issues.push("The domain uses encoded characters that may imitate another website.");
+    }
+
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(url.hostname)) {
+        issues.push("The address uses an IP address instead of a regular domain.");
+    }
+
+    if ((url.hostname.match(/-/g) || []).length >= 3) {
+        issues.push("The domain contains several hyphens.");
+    }
+
+    if (url.hostname.split(".").length > 4) {
+        issues.push("The domain contains an unusually long subdomain structure.");
+    }
+
+    if (issues.length > 0) {
+        result.innerHTML =
+            "<span class='warning'>⚠ Potential warning signs detected:</span><br><br>" +
+            issues.map(issue => "• " + issue).join("<br>") +
+            "<br><br>Do not enter personal or financial information until you verify the website independently.";
+    } else {
+        result.innerHTML =
+            "<span class='safe'>✓ No basic warning patterns detected.</span>" +
+            "<br><br>This does not mean the website is safe. Check its domain, reputation, and authenticity before interacting with it.";
+    }
+}
+
+// ===== PASSWORD CHECKER =====
+
+const passwordInput = document.getElementById("passwordInput");
+
+passwordInput.addEventListener("input", function() {
+    const password = this.value;
+    const fill = document.getElementById("strengthFill");
+    const info = document.getElementById("passwordInfo");
+
+    if (password.length === 0) {
+        fill.style.width = "0%";
+        info.textContent = "Enter a password to see its strength.";
+        return;
+    }
+
+    let score = 0;
+
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    const percentage = Math.round((score / 6) * 100);
+    fill.style.width = percentage + "%";
+
+    if (score <= 2) {
+        fill.style.background = "#d66b5d";
+        info.textContent = "Weak password. Try making it longer and more complex.";
+    } else if (score <= 4) {
+        fill.style.background = "#d6a34e";
+        info.textContent = "Moderate password. Add more variety and length.";
+    } else {
+        fill.style.background = "#4c9b75";
+        info.textContent = "Stronger password based on these basic checks. Consider using a unique passphrase.";
+    }
+});
+
+function togglePassword() {
+    const input = document.getElementById("passwordInput");
+
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+// ===== QUIZ =====
+
+const questions = [
+    {
+        question: "What should you do if someone asks for your OTP?",
+        options: [
+            "Share it immediately",
+            "Ignore the request and never share it",
+            "Post it online",
+            "Send it to a stranger"
+        ],
+        answer: 1,
+        explanation: "Never share OTPs. They can be used to access your accounts."
+    },
+    {
+        question: "Which is a common sign of a phishing message?",
+        options: [
+            "An unexpected urgent request for personal information",
+            "A normal greeting from a friend",
+            "A saved contact number",
+            "An offline notification"
+        ],
+        answer: 0,
+        explanation: "Phishing messages often use urgency and impersonation to trick people."
+    },
+    {
+        question: "What should you do before buying from an unfamiliar online seller?",
+        options: [
+            "Pay immediately",
+            "Ignore customer reviews",
+            "Check the seller's reputation and reviews",
+            "Give your account password"
+        ],
+        answer: 2,
+        explanation: "Always research sellers and use trusted payment methods."
+    },
+    {
+        question: "Which password is generally stronger?",
+        options: [
+            "12345678",
+            "password",
+            "your birthday",
+            "A long, unique passphrase"
+        ],
+        answer: 3,
+        explanation: "Long and unique passwords are harder to guess."
+    },
+    {
+        question: "What should you do if you accidentally share your banking details with a scammer?",
+        options: [
+            "Do nothing",
+            "Contact your bank immediately through official channels",
+            "Send more information",
+            "Delete all evidence"
+        ],
+        answer: 1,
+        explanation: "Contact your bank immediately to secure your account and report possible fraud."
+    }
+];
+
+let currentQuestion = 0;
+let quizScore = 0;
+let answered = false;
+
+function loadQuestion() {
+    answered = false;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("quizTitle").textContent =
+        "Question " + (currentQuestion + 1) + " of " + questions.length;
+
+    document.getElementById("question").textContent = q.question;
+
+    document.getElementById("quizInfo").textContent = "Choose your answer.";
+
+    document.getElementById("quizResult").style.display = "none";
+
+    document.getElementById("nextQuestion").disabled = true;
+    document.getElementById("nextQuestion").style.display = "inline-block";
+
+    document.getElementById("restartQuiz").style.display = "none";
+
+    const options = document.getElementById("quizOptions");
+    options.innerHTML = "";
+
+    q.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+
+        button.onclick = () => selectAnswer(index, button);
+
+        options.appendChild(button);
+    });
+}
+
+function selectAnswer(index, button) {
+    if (answered) return;
+
+    answered = true;
+
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll(".quiz-options button");
+
+    buttons.forEach(b => b.disabled = true);
+
+    const result = document.getElementById("quizResult");
+
+    if (index === q.answer) {
+        quizScore++;
+        button.style.background = "#d9efe2";
+        document.getElementById("quizInfo").textContent = "Correct answer!";
+    } else {
+        button.style.background = "#f8e3df";
+        buttons[q.answer].style.background = "#d9efe2";
+        document.getElementById("quizInfo").textContent = "Incorrect answer.";
+    }
+
+    result.style.display = "block";
+    result.textContent = q.explanation;
+
+    const next = document.getElementById("nextQuestion");
+
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "See My Results";
+    }
+
+    next.disabled = false;
+}
+
+function nextQuestion() {
+    if (!answered) return;
+
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+    } else {
+        showQuizResult();
+    }
+}
+
+function showQuizResult() {
+    document.getElementById("quizTitle").textContent = "Quiz Completed!";
+    document.getElementById("question").textContent = "Your final score:";
+
+    document.getElementById("quizOptions").innerHTML = "";
+
+    document.getElementById("quizInfo").textContent = "";
+
+    document.getElementById("quizResult").style.display = "block";
+
+    document.getElementById("quizResult").textContent =
+        "You scored " + quizScore + " out of " + questions.length +
+        ". " + (quizScore === questions.length
+        ? "Excellent! You understand the basics of digital safety."
+        : "Keep learning and try again to improve your score.");
+
+    document.getElementById("nextQuestion").style.display = "none";
+    document.getElementById("restartQuiz").style.display = "inline-block";
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    quizScore = 0;
+    loadQuestion();
+}
+
+// ===== SAFETY CHECKLIST =====
+
+const checks = document.querySelectorAll(".safety-check");
+
+function updateChecklist() {
+    let completed = 0;
+
+    checks.forEach((check, index) => {
+        if (check.checked) completed++;
+
+        localStorage.setItem("safenetCheck" + index, check.checked);
+    });
+
+    const percentage = Math.round((completed / checks.length) * 100);
+
+    document.getElementById("checkBar").style.width =
+        percentage + "%";
+
+    document.getElementById("checkText").textContent =
+        completed + " of " + checks.length +
+        " safety practices completed (" + percentage + "%).";
+}
+
+checks.forEach((check, index) => {
+    check.checked = localStorage.getItem("safenetCheck" + index) === "true";
+
+    check.addEventListener("change", updateChecklist);
+});
+
+// ===== INITIALIZE =====
+
+showScenario();
+loadQuestion();
+updateChecklist();
+
+</script>
+
+</body>
+</html>
+
+
+
      
