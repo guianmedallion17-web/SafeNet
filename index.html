@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeNet | Digital Safety Hub</title>
+
+<style>
+/* ===== GENERAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fa;
+    color: #253247;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 245px;
+    background: #15263d;
+    color: white;
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    padding: 0 10px;
+}
+
+.logo span {
+    color: #69b7e8;
+}
+
+.tagline {
+    color: #aab9cb;
+    font-size: 12px;
+    padding: 0 10px;
+    margin-bottom: 40px;
+}
+
+.nav-title {
+    font-size: 11px;
+    color: #91a3b8;
+    margin: 15px 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav a {
+    display: block;
+    text-decoration: none;
+    color: #c4d0df;
+    padding: 13px;
+    border-radius: 9px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: #294563;
+    color: white;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 15px 10px;
+    font-size: 12px;
+    color: #aab9cb;
+    line-height: 1.6;
+}
+
+/* ===== MAIN ===== */
+.main {
+    flex: 1;
+    padding: 30px;
+    min-width: 0;
+    max-width: 1600px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    gap: 15px;
+}
+
+.topbar h1 {
+    font-size: 28px;
+    color: #1c304b;
+}
+
+.topbar p {
+    color: #7b8798;
+    margin-top: 6px;
+    font-size: 14px;
+}
+
+.status {
+    background: #e0f1e8;
+    color: #26734e;
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+}
+
+/* ===== HERO ===== */
+.hero {
+    background: linear-gradient(120deg, #1b3859, #28628b);
+    color: white;
+    padding: 35px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+.hero h2 {
+    font-size: 29px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #dceaf6;
+    max-width: 650px;
+    line-height: 1.7;
+}
+
+.hero button {
+    background: #ffffff;
+    color: #204b70;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.hero button:hover {
+    background: #dceaf6;
+}
+
+/* ===== CARDS ===== */
+.section {
+    margin-bottom: 35px;
+    scroll-margin-top: 25px;
+}
+
+.section-heading {
+    margin-bottom: 18px;
+}
+
+.section-heading h2 {
+    font-size: 21px;
+    color: #1c304b;
+    margin-bottom: 6px;
+}
+
+.section-heading p {
+    font-size: 13px;
+    color: #8290a1;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 17px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    border: 1px solid #e6ebf1;
+    box-shadow: 0 3px 12px rgba(20, 45, 75, .03);
+}
+
+.card h3 {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: #263d59;
+}
+
+.card p {
+    color: #7c8999;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.card-icon {
+    font-size: 25px;
+    margin-bottom: 14px;
+}
+
+.small-btn {
+    background: #e8f1f9;
+    color: #28628b;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.small-btn:hover {
+    background: #d4e7f6;
+}
+
+/* ===== SCAM LIBRARY ===== */
+.scam-details {
+    display: none;
+    margin-top: 12px;
+    padding: 13px;
+    background: #f2f6fa;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #586a80;
+}
+
+.scam-details.show {
+    display: block;
+}
+
+/* ===== SCAM SPOTTER ===== */
+.example-message {
+    background: #f0f4f8;
+    border-left: 4px solid #d48b54;
+    padding: 20px;
+    border-radius: 8px;
+    line-height: 1.8;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.choice-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.choice-btn {
+    background: #e9f0f7;
+    color: #2c5276;
+    padding: 12px 17px;
+    border-radius: 8px;
+}
+
+.choice-btn:hover {
+    background: #d5e5f3;
+}
+
+.feedback {
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 8px;
+    display: none;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.correct {
+    display: block;
+    background: #e3f4e9;
+    color: #26734e;
+}
+
+.incorrect {
+    display: block;
+    background: #fff0e9;
+    color: #a34c35;
+}
+
+/* ===== INPUTS ===== */
+.field {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.field input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #dce3eb;
+    border-radius: 8px;
+    outline: none;
+}
+
+.field input:focus {
+    border-color: #4389bd;
+}
+
+.primary-btn {
+    background: #28628b;
+    color: white;
+    padding: 13px 18px;
+    border-radius: 8px;
+}
+
+.primary-btn:hover {
+    background: #1b486b;
+}
+
+.result {
+    margin-top: 16px;
+    padding: 15px;
+    background: #f0f4f8;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.7;
+    display: none;
+    overflow-wrap: anywhere;
+}
+
+.warning {
+    color: #b35b37;
+    font-weight: bold;
+}
+
+.safe {
+    color: #28734d;
+    font-weight: bold;
+}
+
+/* ===== PASSWORD ===== */
+.strength-bar {
+    height: 9px;
+    background: #e9edf2;
+    border-radius: 10px;
+    margin-top: 13px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: .3s;
+}
+
+.password-info {
+    font-size: 13px;
+    color: #788697;
+    margin-top: 10px;
+}
+
+/* ===== QUIZ ===== */
+.quiz-question {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 10px;
+}
+
+.quiz-options button {
+    padding: 14px;
+    text-align: left;
+    border-radius: 8px;
+    background: #f0f4f8;
+    color: #344b64;
+    border: 1px solid transparent;
+}
+
+.quiz-options button:hover {
+    border-color: #4389bd;
+}
+
+.quiz-options button:disabled {
+    cursor: default;
+    opacity: .8;
+}
+
+.quiz-info {
+    color: #8290a1;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.quiz-result {
+    margin-top: 20px;
+    padding: 18px;
+    background: #e8f1f9;
+    border-radius: 10px;
+    display: none;
+}
+
+/* ===== CHECKLIST ===== */
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf0f4;
+    font-size: 14px;
+}
+
+.check-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: #28628b;
+}
+
+.check-progress {
+    height: 9px;
+    background: #e9edf2;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.check-progress div {
+    height: 100%;
+    width: 0%;
+    background: #4389bd;
+    transition: .3s;
+}
+
+/* ===== EMERGENCY GUIDE ===== */
+.guide-step {
+    padding: 16px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.guide-step strong {
+    color: #28628b;
+    display: block;
+    margin-bottom: 7px;
+}
+
+.guide-step p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #718095;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #8a96a5;
+    font-size: 12px;
+    border-top: 1px solid #e2e8ef;
+    margin-top: 25px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 950px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .container {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 17px;
+    }
+
+    .logo {
+        margin-bottom: 5px;
+    }
+
+    .tagline {
+        margin-bottom: 15px;
+    }
+
+    .nav-title, .sidebar-footer {
+        display: none;
+    }
+
+    .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .nav a {
+        padding: 10px;
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .main {
+        padding: 18px;
+    }
+
+    .topbar h1 {
+        font-size: 23px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+
+    .hero h2 {
+        font-size: 23px;
+    }
+
+    .field {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">Safe<span>Net.</span></div>
+    <div class="tagline">Digital Safety & Awareness Hub</div>
+
+    <div class="nav-title">Main Menu</div>
+
+    <nav class="nav">
+        <a href="#home" class="active">⌂ Home</a>
+        <a href="#library">▤ Scam Library</a>
+        <a href="#spotter">◉ Scam Spotter</a>
+        <a href="#linkchecker">↗ Link Checker</a>
+        <a href="#password">▣ Password Checker</a>
+        <a href="#quiz">☑ Safety Quiz</a>
+        <a href="#checklist">✓ Checklist</a>
+        <a href="#emergency">⚠ Emergency Guide</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        Stay alert. Think before you click.<br>
+        Your safety matters online.
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- HEADER -->
+<header class="topbar" id="home">
+    <div>
+        <h1>Digital Safety Hub</h1>
+        <p>Your guide to a safer and smarter online experience.</p>
+    </div>
+
+    <div class="status">● Learning Mode</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <h2>Think Before You Click.</h2>
+
+    <p>
+        The internet makes life easier, but it also creates opportunities
+        for scammers. Learn how to recognize suspicious activities,
+        protect your personal information, and stay safe online.
+    </p>
+
+    <button onclick="document.getElementById('library').scrollIntoView()">
+        Explore Safety Guides →
+    </button>
+</section>
+
+<!-- QUICK ACCESS -->
+<section class="section">
+    <div class="section-heading">
+        <h2>Explore SafeNet</h2>
+        <p>Choose a tool and start learning about digital safety.</p>
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Scam Awareness</h3>
+            <p>Learn about common online scams and how to avoid them.</p>
+            <button class="small-btn" onclick="goTo('library')">Explore</button>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🔎</div>
+            <h3>Scam Spotter</h3>
+            <p>Test your ability to recognize suspicious messages.</p>
+            <button class="small-btn" onclick="goTo('spotter')">Try It</button>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🔐</div>
+            <h3>Account Security</h3>
+            <p>Check password strength and improve your account security.</p>
+            <button class="small-btn" onclick="goTo('password')">Get Started</button>
+        </div>
+
+    </div>
+</section>
+
+<!-- SCAM LIBRARY -->
+<section class="section" id="library">
+
+    <div class="section-heading">
+        <h2>Online Scam Library</h2>
+        <p>Understand different scams and their warning signs.</p>
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <div class="card-icon">📧</div>
+            <h3>Phishing Scams</h3>
+            <p>Fake emails or messages designed to steal personal information.</p>
+            <button class="small-btn" onclick="toggleDetails('phishing')">Learn More</button>
+            <div class="scam-details" id="phishing">
+                Warning signs:
+                <br>• Fake bank or company messages
+                <br>• Suspicious links
+                <br>• Requests for passwords or OTPs
+                <br><br>
+                Protection: Visit official websites directly instead of clicking unexpected links.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🛒</div>
+            <h3>Online Shopping Scams</h3>
+            <p>Fake sellers or stores that take payment without delivering products.</p>
+            <button class="small-btn" onclick="toggleDetails('shopping')">Learn More</button>
+            <div class="scam-details" id="shopping">
+                Warning signs:
+                <br>• Prices that seem too good to be true
+                <br>• No verified reviews
+                <br>• Sellers demanding direct payment
+                <br><br>
+                Protection: Check seller ratings, reviews, and official payment options.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <h3>Investment Scams</h3>
+            <p>Fraudulent offers promising unrealistic profits or guaranteed returns.</p>
+            <button class="small-btn" onclick="toggleDetails('investment')">Learn More</button>
+            <div class="scam-details" id="investment">
+                Warning signs:
+                <br>• Guaranteed high profits
+                <br>• Pressure to invest immediately
+                <br>• Referral-based earning schemes
+                <br><br>
+                Protection: Verify the company and its authorization before investing.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📱</div>
+            <h3>OTP Scams</h3>
+            <p>Scammers trick people into sharing one-time passwords or verification codes.</p>
+            <button class="small-btn" onclick="toggleDetails('otp')">Learn More</button>
+            <div class="scam-details" id="otp">
+                Warning signs:
+                <br>• Someone asks for your OTP
+                <br>• Unexpected verification requests
+                <br>• Messages claiming your account will be blocked
+                <br><br>
+                Protection: Never share OTPs, PINs, or verification codes.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">❤️</div>
+            <h3>Romance Scams</h3>
+            <p>Fake online relationships used to manipulate victims into sending money.</p>
+            <button class="small-btn" onclick="toggleDetails('romance')">Learn More</button>
+            <div class="scam-details" id="romance">
+                Warning signs:
+                <br>• Requests for money from someone you barely know
+                <br>• Refusal to meet or video call
+                <br>• Emotional pressure and urgent stories
+                <br><br>
+                Protection: Do not send money or private information to unverified online contacts.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🎁</div>
+            <h3>Fake Giveaway Scams</h3>
+            <p>Fake prizes used to collect personal information or payment.</p>
+            <button class="small-btn" onclick="toggleDetails('giveaway')">Learn More</button>
+            <div class="scam-details" id="giveaway">
+                Warning signs:
+                <br>• Unexpected prize notifications
+                <br>• Requests for processing fees
+                <br>• Suspicious accounts pretending to be brands
+                <br><br>
+                Protection: Verify giveaways through the official organization's account.
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SCAM SPOTTER -->
+<section class="section" id="spotter">
+
+    <div class="section-heading">
+        <h2>Interactive Scam Spotter</h2>
+        <p>Can you identify whether this message is legitimate or suspicious?</p>
+    </div>
+
+    <div class="card">
+        <h3>Scenario 01: Suspicious Bank Message</h3>
+
+        <div class="example-message">
+            SECURITY ALERT! Your bank account will be suspended today.
+            Verify your account immediately by clicking this link.
+            Send your account password and OTP to complete verification.
+        </div>
+
+        <p>What do you think about this message?</p>
+
+        <div class="choice-row" style="margin-top:15px">
+            <button class="choice-btn" onclick="checkSpotter('scam')">🚨 It is a scam</button>
+            <button class="choice-btn" onclick="checkSpotter('safe')">✓ It is legitimate</button>
+        </div>
+
+        <div class="feedback" id="spotterFeedback"></div>
+
+        <button class="small-btn" onclick="nextScenario()">Next Scenario →</button>
+    </div>
+
+</section>
+
+<!-- LINK CHECKER -->
+<section class="section" id="linkchecker">
+
+    <div class="section-heading">
+        <h2>Suspicious Link Checker</h2>
+        <p>Learn to recognize common warning signs in website addresses.</p>
+    </div>
+
+    <div class="card">
+        <h3>Analyze a Website URL</h3>
+        <p>Enter a website address to check for suspicious patterns.</p>
+
+        <div class="field">
+            <input type="text" id="urlInput" placeholder="Example: https://example.com">
+            <button class="primary-btn" onclick="checkLink()">Analyze</button>
+        </div>
+
+        <div class="result" id="linkResult"></div>
+
+        <p style="margin-top:15px">
+            Note: This is an educational checker. It does not access the
+            website or confirm whether a URL is safe. A clean result
+            does not guarantee safety.
+        </p>
+    </div>
+
+</section>
+
+<!-- PASSWORD CHECKER -->
+<section class="section" id="password">
+
+    <div class="section-heading">
+        <h2>Password Strength Checker</h2>
+        <p>Learn what makes a password difficult to guess.</p>
+    </div>
+
+    <div class="card">
+        <h3>Test Your Password</h3>
+
+        <div class="field">
+            <input type="password" id="passwordInput" placeholder="Enter a sample password">
+            <button class="primary-btn" onclick="togglePassword()">Show</button>
+        </div>
+
+        <div class="strength-bar">
+            <div class="strength-fill" id="strengthFill"></div>
+        </div>
+
+        <div class="password-info" id="passwordInfo">
+            Enter a password to see its strength.
+        </div>
+
+        <p style="margin-top:15px">
+            For privacy, use a sample password instead of your actual password.
+            This checker works locally in your browser.
+        </p>
+    </div>
+
+</section>
+
+<!-- QUIZ -->
+<section class="section" id="quiz">
+
+    <div class="section-heading">
+        <h2>Digital Safety Quiz</h2>
+        <p>Test your knowledge and see how much you have learned.</p>
+    </div>
+
+    <div class="card">
+        <h3 id="quizTitle">Question 1 of 5</h3>
+
+        <div class="quiz-question" id="question">
+            What should you do if someone asks for your OTP?
+        </div>
+
+        <div class="quiz-options" id="quizOptions"></div>
+
+        <div class="quiz-info" id="quizInfo">Choose your answer.</div>
+
+        <div class="quiz-result" id="quizResult"></div>
+
+        <button class="primary-btn" id="nextQuestion" onclick="nextQuestion()" style="margin-top:18px" disabled>
+            Next Question →
+        </button>
+
+        <button class="small-btn" id="restartQuiz" onclick="restartQuiz()" style="display:none">
+            Try Again
+        </button>
+    </div>
+
+</section>
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+
+    <div class="section-heading">
+        <h2>Personal Safety Checklist</h2>
+        <p>Check the practices you already follow to protect yourself.</p>
+    </div>
+
+    <div class="card">
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I use strong and unique passwords.</label>
+        </div>
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I enable two-factor authentication.</label>
+        </div>
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I never share my OTP or PIN.</label>
+        </div>
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I check website addresses before clicking.</label>
+        </div>
+
+        <div class="check-item">
+            <input type="checkbox" class="safety-check">
+            <label>I avoid downloading files from unknown sources.</label>
+        </div>
+
+     
